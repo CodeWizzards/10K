@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crash Auditor — Ambiente de Teste</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0a0910;color:#f4f2fb;font:15px Inter,system-ui,sans-serif;background-image:radial-gradient(circle at 30% 15%,#36226366,transparent 32%),radial-gradient(circle at 76% 76%,#11745230,transparent 29%)}main{width:min(560px,calc(100% - 32px));padding:34px;border:1px solid #ffffff15;border-radius:24px;background:#14121dcc;box-shadow:0 24px 80px #0008}.eyebrow{color:#b9a7ff;text-transform:uppercase;font-size:11px;letter-spacing:.14em;font-weight:800}h1{font-size:31px;margin:10px 0}p{line-height:1.6;color:#aaa6b9}.card{padding:16px;border:1px solid #ffffff12;border-radius:14px;background:#0c0b12;margin:23px 0}.state{display:flex;align-items:center;gap:8px;color:#7ce5a7;font-weight:700}.dot{width:9px;height:9px;border-radius:50%;background:#54d88c;box-shadow:0 0 12px #54d88c}code{display:block;margin-top:12px;color:#c7b9ff;font-size:12px;overflow-wrap:anywhere}button{border:0;border-radius:10px;padding:12px 16px;background:linear-gradient(135deg,#8d6bff,#5e48cf);color:white;font-weight:800;cursor:pointer}.foot{font-size:12px;color:#767187;margin-top:18px}
+  </style>
+</head>
+<body><main>
+  <div class="eyebrow">Crash Auditor · sandbox local</div>
+  <h1>Ambiente fictício da extensão</h1>
+  <p>Esta página cria uma sessão de demonstração local. Com a extensão carregada, a conta será adicionada automaticamente ao painel em modo teste.</p>
+  <div class="card"><div class="state"><i class="dot"></i><span id="state">Gerando sessão fictícia…</span></div><code id="details">Aguardando</code></div>
+  <button id="retry">Gerar nova sessão</button>
+  <div class="foot">Nenhuma credencial, saldo ou endereço do site real é usado aqui.</div>
+</main>
+<script>
+  async function createSession(){const state=document.getElementById('state'),details=document.getElementById('details');state.textContent='Gerando sessão fictícia…';const response=await fetch('/test-site/launcher');const data=await response.json();state.textContent='Sessão fictícia criada — a extensão deve capturar automaticamente.';details.textContent=`playerCasinoId: ${data.playerCasinoId}\nsid: ${data.sid}`}
+  document.getElementById('retry').addEventListener('click',createSession);createSession();
+</script></body></html>

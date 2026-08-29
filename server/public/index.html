@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crash Auditor – Painel de Gerenciamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══ TOP BAR ═══ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <span class="brand">🎯 Crash Auditor</span>
+      </div>
+      <div class="topbar-right">
+        <div class="stat-pill">
+          <span class="stat-icon stat-icon-accounts">◎</span>
+          <span class="stat-label">Contas</span>
+          <span class="stat-val" id="gs-total">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-icon stat-icon-active">↗</span>
+          <span class="stat-label">Ativas</span>
+          <span class="stat-val accent" id="gs-active">0</span>
+        </div>
+        <div class="stat-pill big">
+          <span class="stat-icon stat-icon-balance">R$</span>
+          <span class="stat-label">Saldo Total</span>
+          <span class="stat-val green" id="gs-balance">R$ 0,00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ═══ PAINEL DE CONTROLE ═══ -->
+    <section class="control-panel">
+        <div class="section-kicker"><span></span>Operação em tempo real</div>
+        <h2>Painel de Controle</h2>
+        <label class="testmode-toggle" title="Executa o painel com dados fictícios">
+          <input type="checkbox" id="chk-testmode" />
+          <span class="testmode-switch" aria-hidden="true"></span>
+          <span class="testmode-copy"><b>Modo teste</b><small>Sandbox local</small></span><em>Seguro</em>
+        </label>
+      <div class="control-row">
+        <div class="mode-group">
+          <button class="mode-btn active" id="btn-mode-dup" data-mode="duplicate">⚡ Duplicar</button>
+          <button class="mode-btn" id="btn-mode-target" data-mode="target">🎯 Alvo</button>
+        </div>
+        <div class="target-group" id="target-group" style="display:none;">
+          <label>Alvo:</label>
+          <input type="number" id="inp-target" placeholder="Ex: 10" step="0.1" min="1.01" value="10" />
+          <span class="target-x">x</span>
+        </div>
+        <div class="control-actions">
+          <button class="btn btn-green" id="btn-start-selected">▶ Iniciar Selecionadas</button>
+          <button class="btn btn-red" id="btn-stop-all">⏹ Parar Todas</button>
+        </div>
+        <a class="test-lab-link" href="/test-site" target="_blank" rel="noopener">↗ Laboratório da extensão</a>
+      </div>
+    </section>
+
+    <!-- ═══ CONTAS ═══ -->
+    <section class="accounts-section">
+      <div class="accounts-header">
+        <div>
+          <div class="section-kicker"><span></span>Gerenciamento</div>
+          <h2>Contas</h2>
+        </div>
+        <div class="accounts-actions">
+          <button class="btn btn-sm btn-ghost" id="btn-add">＋ Adicionar</button>
+          <button class="btn btn-sm btn-ghost" id="btn-refresh">↻</button>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+      <table class="accounts-table" id="accounts-table">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" id="check-all" title="Selecionar todas" /></th>
+            <th class="col-cpf">CPF</th>
+            <th class="col-name">Nome</th>
+            <th class="col-status">Status</th>
+            <th class="col-balance">Saldo</th>
+            <th class="col-actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="accounts-body">
+          <tr class="empty-row" id="empty-row">
+            <td colspan="6"><div class="empty-state"><b>Nenhuma conta cadastrada</b><span>Adicione a primeira conta para começar.</span><button class="btn btn-primary btn-sm" type="button" id="btn-add-empty">＋ Adicionar conta</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <!-- ═══ LOGS ═══ -->
+    <section class="log-section">
+      <div class="log-header-bar">
+        <h2>📋 Logs</h2>
+        <button class="btn btn-sm btn-ghost" id="btn-clear-logs">Limpar</button>
+      </div>
+      <div class="log-feed" id="log-feed">
+        <div class="log-empty">Aguardando eventos...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ MODAL ═══ -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+      <div class="modal modal-account" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+        <div><div class="modal-eyebrow">Cadastro</div><h3 id="modal-title">Adicionar Conta</h3></div>
+        <button class="modal-close" id="modal-close" type="button" aria-label="Fechar">✕</button>
+      </div>
+      <form id="account-form" autocomplete="off" data-lpignore="true" data-1p-ignore="true">
+        <p class="modal-intro">Os dados ficam disponíveis apenas para a operação deste painel.</p>
+        <div class="form-grid">
+          <label class="field field-wide"><span>Nome</span><input type="text" id="inp-name" name="account-display-name" autocomplete="off" placeholder="Nome do jogador" required /></label>
+          <label class="field"><span>CPF</span><input type="text" id="inp-cpf" name="account-document" autocomplete="off" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" /></label>
+          <label class="field"><span>Player Casino ID</span><input type="text" id="inp-pcid" name="casino-player-id" autocomplete="off" data-lpignore="true" data-1p-ignore="true" placeholder="ID do jogador" /></label>
+          <label class="field field-wide"><span>SID</span><input type="text" id="inp-sid" name="session-token" autocomplete="off" data-lpignore="true" data-1p-ignore="true" placeholder="UUID da sessão" /></label>
+          <label class="field field-wide"><span>Senha</span><input class="secret-input" type="text" id="inp-password" name="account-secret" autocomplete="off" data-lpignore="true" data-1p-ignore="true" placeholder="Senha da conta" /></label>
+        </div>
+        <input type="hidden" id="inp-edit-id" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="btn-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-modal" hidden>
+    <div class="modal modal-delete" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+      <div class="delete-icon">!</div>
+      <div class="modal-eyebrow">Ação irreversível</div>
+      <h3 id="delete-title">Remover esta conta?</h3>
+      <p id="delete-message">Esta ação remove a conta do painel e não pode ser desfeita.</p>
+      <div class="modal-actions"><button type="button" class="btn btn-ghost" id="btn-delete-cancel">Cancelar</button><button type="button" class="btn btn-danger" id="btn-delete-confirm">Remover conta</button></div>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

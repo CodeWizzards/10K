@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Crash Auditor</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup-shell">
+    <header class="header">
+      <div class="brand-mark"><img src="icons/icon.png" alt="" /></div>
+      <div class="brand-copy"><span>CRASH AUDITOR</span><h1>Captura de sessão</h1></div>
+      <div class="live-dot" title="Extensão ativa"></div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-kicker"><span></span>Sincronização</div>
+      <h2>Conecte seu painel</h2>
+      <p>Configure o destino onde as sessões capturadas serão enviadas.</p>
+    </section>
+
+    <section class="session-card" id="session-card" data-status="idle">
+      <div class="session-icon">◎</div>
+      <div class="session-copy"><span id="session-eyebrow">Monitoramento ativo</span><strong id="session-title">Nenhuma sessão identificada</strong><small id="session-detail">Abra o ambiente de teste ou o jogo para capturar uma sessão.</small></div>
+      <b class="session-count" id="session-count">0</b>
+    </section>
+
+    <form class="content" id="settings-form" autocomplete="off">
+      <label class="field">
+        <span>Operador</span>
+        <input type="text" id="inp-operator" name="operator-name" autocomplete="off" placeholder="Ex.: Admin" />
+      </label>
+
+      <label class="field">
+        <span>Servidor</span>
+        <input type="url" id="inp-server" name="server-url" autocomplete="off" placeholder="http://localhost:3000" />
+      </label>
+
+      <button id="btn-save" type="submit"><span>Salvar configurações</span><b>→</b></button>
+      <div id="status-msg" role="status" aria-live="polite"></div>
+    </form>
+
+    <footer><span class="privacy-dot"></span>Dados salvos apenas neste navegador</footer>
+  </main>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

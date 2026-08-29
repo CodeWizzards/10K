@@ -1,0 +1,13 @@
+# Dependências instaladas localmente
+server/node_modules/
+
+# Configurações, dados e credenciais locais
+server/.env
+server/accounts.json
+server/data.json
+server/*.db
+server/.runtime-settings.json
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
